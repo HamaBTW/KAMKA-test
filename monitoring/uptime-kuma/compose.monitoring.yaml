@@ -1,0 +1,15 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.4.0
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "server/server.js", "--health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  uptime-kuma-data:
