@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-COMPOSE_FILE="${COMPOSE_FILE:-compose.prod.yaml}"
+COMPOSE_FILE="${COMPOSE_FILE:-compose.dokploy.yaml}"
 
 if [ ! -f .env ]; then
   echo "ERROR: .env file not found. Copy .env.example to .env and fill in values."
