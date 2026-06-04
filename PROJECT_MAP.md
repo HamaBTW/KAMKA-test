@@ -73,8 +73,8 @@ todo-app/
 ├── monitoring/
 │   └── uptime-kuma/
 │       └── compose.monitoring.yaml  # Standalone Uptime Kuma stack
-├── compose.yaml             # Dev profile (hot-reload, bind mounts)
-├── compose.prod.yaml        # Production profile (no binds, Caddy TLS)
+├── compose.yaml             # Dev (hot-reload, bind mounts)
+├── compose.dokploy.yaml     # Production (for Dokploy deployment)
 ├── .env.example             # Committed template
 ├── .gitignore               # .env, node_modules, etc.
 ├── PROJECT_MAP.md
@@ -92,7 +92,7 @@ todo-app/
 - **Multi-stage builds** to keep final images < 50MB each
 - **Pino** for async JSON logging (no file I/O, Docker-native stdout)
 - **PG** driver (not ORM) — minimal dependency, SQL is fine for a TODO
-- **Caddy** for prod reverse-proxy (auto HTTPS via Let's Encrypt)
+- **Dokploy** handles reverse-proxy + HTTPS via built-in Traefik (no separate Caddy needed)
 - **Env vars** sourced from `.env` (gitignored), `.env.example` committed
 
 ## ORPHANS & PENDING
