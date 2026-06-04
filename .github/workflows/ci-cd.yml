@@ -8,7 +8,6 @@ on:
 
 env:
   GHCR_REGISTRY: ghcr.io
-  GHCR_USERNAME: ${{ github.actor }}
   FRONTEND_IMAGE: ghcr.io/${{ github.actor }}/todo-frontend
   BACKEND_IMAGE: ghcr.io/${{ github.actor }}/todo-backend
 
@@ -63,23 +62,3 @@ jobs:
           tags: |
             ${{ env.BACKEND_IMAGE }}:latest
             ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
-
-  deploy:
-    needs: build-and-push
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.DOKPLOY_HOST }}
-          username: ${{ secrets.DOKPLOY_USER }}
-          key: ${{ secrets.DOKPLOY_SSH_KEY }}
-          script: |
-            cd /opt/todo-app
-            echo "GHCR_USERNAME=${{ github.actor }}" >> .env
-            docker compose -f compose.prod.yaml pull
-            docker compose -f compose.prod.yaml up -d --remove-orphans
-            docker image prune -f

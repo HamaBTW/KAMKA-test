@@ -42,21 +42,37 @@ Each service exposes a health endpoint. The CI/CD pipeline builds, pushes, and d
 On push to `main`:
 1. **Lint** — `standard` (backend) + `eslint` (frontend)
 2. **Build & Push** — multi-stage Docker images to GHCR (`ghcr.io/$USER/todo-{frontend,backend}`)
-3. **Deploy** — SSH into Dokploy VPS, pull images, restart stack
+3. **Deploy** — handled by Dokploy (auto-detects push to GitHub repo and redeploys)
 
-## Production Deployment
+> Only `GHCR_TOKEN` is needed as a GitHub secret — no SSH keys required.
+
+## Production Deployment (Dokploy)
+
+1. In Dokploy dashboard, create a new project → link your GitHub repo
+2. Set compose file to `compose.prod.yaml`
+3. Set environment variables in Dokploy:
+   - `GHCR_USERNAME` = your GitHub username
+   - `DB_NAME`, `DB_USER`, `DB_PASSWORD` = values of your choice
+   - `DOMAIN` = your domain (update `Caddyfile` accordingly)
+4. Deploy — Dokploy pulls images from GHCR and runs the stack
+
+### Manual prod deploy (without Dokploy)
 
 ```bash
-# On the production server:
-cp .env.example .env
-# Fill in DB_NAME, DB_USER, DB_PASSWORD
+export GHCR_USERNAME=your_github_username
 docker compose -f compose.prod.yaml up -d
 ```
 
-Compose.prod.yaml differs from dev:
-- No bind mounts (immutable images)
-- Caddy reverse-proxy with auto HTTPS (update Caddyfile with your domain)
-- No hot-reload
+### Dev vs Prod
+
+| Aspect | Dev (`compose.yaml`) | Prod (`compose.prod.yaml`) |
+|--------|----------------------|---------------------------|
+| Frontend | Vite dev server (HMR) | nginx (static files) |
+| Backend | `node --watch` (auto-restart) | `node` (immutable) |
+| Reverse proxy | None | Caddy (auto HTTPS) |
+| Build | Local build | Pulls from GHCR |
+| Image source | `build` only | `image` from GHCR |
+| Bind mounts | Yes (hot-reload) | No
 
 ## Monitoring
 
@@ -86,9 +102,8 @@ Both scripts use `set -euo pipefail` and validate that `.env` exists.
 
 - Never commit `.env` (it's gitignored)
 - Commit `.env.example` with placeholder values
-- In CI/CD, use GitHub Actions secrets:
-  - `GHCR_TOKEN` — PAT with `write:packages` scope
-  - `DOKPLOY_HOST`, `DOKPLOY_USER`, `DOKPLOY_SSH_KEY`
+- GitHub secret needed:
+  - `GHCR_TOKEN` — PAT with `write:packages` scope (set in repo Settings → Secrets → Actions)
 
 ## Project Structure
 

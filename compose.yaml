@@ -3,7 +3,6 @@ services:
     build:
       context: ./frontend
       target: deps
-    image: ghcr.io/${GHCR_USERNAME:-user}/todo-frontend:dev
     ports:
       - "5173:5173"
     volumes:
@@ -24,7 +23,6 @@ services:
     build:
       context: ./backend
       target: deps
-    image: ghcr.io/${GHCR_USERNAME:-user}/todo-backend:dev
     ports:
       - "3000:3000"
     volumes:
