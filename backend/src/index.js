@@ -33,4 +33,3 @@ start().catch((err) => {
   logger.fatal(err, 'failed to start')
   process.exit(1)
 })
-
