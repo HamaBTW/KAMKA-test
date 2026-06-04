@@ -66,21 +66,11 @@ On push to `main`:
 
 Dokploy handles HTTPS certificates automatically.
 
-## Monitoring (Uptime Kuma)
+## Monitoring
 
-Deploy via Dokploy as a separate project:
-1. New project → link `HamaBTW/KAMKA-test`
-2. Compose file: `monitoring/uptime-kuma/compose.monitoring.yaml`
-3. Set domain (e.g., `status.yourdomain.com`), container port `3001`
-4. Deploy
-
-After setup, add monitors:
-| Monitor | URL | Type |
-|---------|-----|------|
-| Backend API | `https://yourdomain.com/health` | HTTP(s) |
-| Frontend | `https://yourdomain.com` | HTTP(s) |
-
-Each monitor checks every 60s and alerts on failure.
+Uptime Kuma deployed directly from Dokploy template. Monitors:
+- `https://yourdomain.com/health` (backend)
+- `https://yourdomain.com` (frontend)
 
 ## Scripts
 
