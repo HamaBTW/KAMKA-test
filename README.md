@@ -56,7 +56,7 @@ On push to `main`:
 2. Set compose file to `compose.dokploy.yaml`
 3. Set environment variables:
    ```
-   GHCR_USERNAME=HamaBTW
+   GHCR_USERNAME=hamabtw
    DB_NAME=todo
    DB_USER=todo
    DB_PASSWORD=<pick one>

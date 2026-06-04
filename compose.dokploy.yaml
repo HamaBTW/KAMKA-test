@@ -3,7 +3,7 @@ services:
     build:
       context: ./frontend
       target: prod
-    image: ghcr.io/${GHCR_USERNAME:-user}/todo-frontend:latest
+    image: ghcr.io/${GHCR_USERNAME}/todo-frontend:latest
     ports:
       - "80:80"
     healthcheck:
@@ -16,7 +16,7 @@ services:
     build:
       context: ./backend
       target: prod
-    image: ghcr.io/${GHCR_USERNAME:-user}/todo-backend:latest
+    image: ghcr.io/${GHCR_USERNAME}/todo-backend:latest
     environment:
       DB_HOST: db
       DB_PORT: 5432
