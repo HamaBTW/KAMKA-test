@@ -4,8 +4,8 @@ services:
       context: ./frontend
       target: prod
     image: ghcr.io/${GHCR_USERNAME}/todo-frontend:latest
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     healthcheck:
       test: ["CMD", "wget", "--spider", "http://localhost:80"]
       interval: 15s
